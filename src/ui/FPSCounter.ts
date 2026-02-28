@@ -1,25 +1,41 @@
-import {Container, Text, Ticker} from "pixi.js";
+import {Container, Text, Ticker, UPDATE_PRIORITY} from "pixi.js";
 
 export class FPSCounter extends Container {
-    protected label: Text;
+    protected text: Text;
+    protected lastMeasureTime: number;
+    protected framesCount: number;
 
-    constructor() {
+    constructor(ticker: Ticker) {
         super();
-        this.label = new Text("FPS: 0", {
+        this.text = new Text("FPS: 0", {
             fontFamily: "Inter, Arial, sans-serif",
-            fontSize: 14,
-            fill: 0xffffff
+            fontWeight: "bold",
+            fontSize: 16,
+            fill: 0xEE0000
         });
 
-        this.label.position.set(12, 8);
-
-
-        app.ticker.add(this.update);
+        this.text.position.set(12, 8);
+        this.framesCount = 0;
+        this.lastMeasureTime = this.getTime();
+        ticker.add(this.measure, this, UPDATE_PRIORITY.UTILITY);
+        this.addChild(this.text);
     }
 
-    private update = (delta: number): void => {
-        // Using ticker.FPS gives smoothed value
-        const fps = Math.round(Ticker.shared.FPS);
-        this.label.text = `FPS: ${fps}`;
-    };
+    protected measure() {
+        const currentTime = this.getTime();
+        this.framesCount++;
+
+        if (currentTime - this.lastMeasureTime >= 1000) {
+            const fps = (this.framesCount * 1000) / (currentTime - this.lastMeasureTime);
+
+            this.lastMeasureTime = currentTime;
+            this.framesCount = 0;
+            this.text.text = `FPS: ${Math.round(fps)}`;
+        }
+    }
+
+    // window.performance for more accurate data.
+    protected getTime() {
+        return (window.performance && window.performance.now) ? window.performance.now() : Number(new Date());
+    }
 }

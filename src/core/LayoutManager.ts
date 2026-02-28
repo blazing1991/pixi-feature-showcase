@@ -1,4 +1,5 @@
-import {Application, utils} from "pixi.js";
+import {Container, utils} from "pixi.js";
+import type {IRenderer} from "pixi.js";
 import {APPLICATION_RESOLUTION} from "../config/constants";
 import {getViewport, isPortraitRatio} from "../utils/Utils";
 import type {Dimensions} from "../config/types";
@@ -12,9 +13,7 @@ export class LayoutManager {
     protected scale = 1;
     protected logicalDimensions: Dimensions = APPLICATION_RESOLUTION.portrait;
 
-    constructor(
-        protected application: Application,
-    ) {
+    constructor(protected rootContainer: Container, protected applicationRenderer: IRenderer) {
         window.addEventListener("resize", () => this.onResize());
     }
 
@@ -33,16 +32,16 @@ export class LayoutManager {
         );
 
         // Resize renderer to full window
-        this.application.renderer.resize(viewport.width, viewport.height);
+        this.applicationRenderer.resize(viewport.width, viewport.height);
 
         // Scale stage
-        this.application.stage.scale.set(this.scale);
+        this.rootContainer.scale.set(this.scale);
 
         // Center stage
         const scaledWidth = logicalDimensions.width * this.scale;
         const scaledHeight = logicalDimensions.height * this.scale;
 
-        this.application.stage.position.set(
+        this.rootContainer.position.set(
             (viewport.width - scaledWidth) / 2,
             (viewport.height - scaledHeight) / 2
         );

@@ -1,1 +1,1 @@
-# improved-broccoli
+# pixi-feature-showcase
