@@ -51,7 +51,7 @@ export class Application extends PIXIApplication {
         return new Promise<void>((resolve) => {
             const assetsToLoad: string[] = [];
             Object.values(ASSETS).forEach((assetName: string) => {
-                Assets.add(assetName, `/assets/${assetName}`);
+                Assets.add(assetName, `assets/${assetName}`);
                 assetsToLoad.push(assetName);
             })
             Assets.load(assetsToLoad).then(() => resolve());
