@@ -5,7 +5,6 @@ import {HTML_CONTAINER_ID} from "../config/constants";
 import type {Dimensions} from "../config/types";
 import {ASSETS} from "../config/assets";
 import {FPSCounter} from "../ui/FPSCounter";
-import {MainScene} from "../scenes/main/MainScene";
 import {Button} from "../ui/Button";
 
 export class Application extends PIXIApplication {
@@ -33,23 +32,10 @@ export class Application extends PIXIApplication {
         this.initContainers();
         this.initLayoutManager();
         this.initSceneManager();
-        this.addListeners();
         this.initFPSCounter();
-        this.createGlobalUI();
+        this.initBackButton();
+        this.addListeners();
         await this.enterMainScene();
-    }
-
-    private createGlobalUI(): void {
-        this.backButton = new Button("Back");
-        this.backButton.scale.set(0.5);
-        this.backButton.position.set(this.backButton.width / 2, this.backButton.height + 20);
-        this.backButton.visible = false;
-        this.backButton.onClick(() => this.sceneManager.goToMainScene());
-        this.overlayContainer.addChild(this.backButton);
-    }
-
-    protected async enterMainScene() {
-        await this.sceneManager.goToMainScene();
     }
 
     protected attachApplication() {
@@ -74,6 +60,7 @@ export class Application extends PIXIApplication {
     protected initContainers() {
         this.rootContainer = new Container();
         this.overlayContainer = new Container();
+
         this.stage.addChild(this.rootContainer, this.overlayContainer);
     }
 
@@ -85,14 +72,28 @@ export class Application extends PIXIApplication {
         this.sceneManager = new SceneManager(this.rootContainer, this.layoutManager);
     }
 
+    protected initFPSCounter() {
+        const fpsCounter = new FPSCounter(this.ticker);
+        this.overlayContainer.addChild(fpsCounter);
+    }
+
+    protected initBackButton(): void {
+        this.backButton = new Button("Back");
+        this.backButton.scale.set(0.5);
+        this.backButton.position.set(this.backButton.width / 2, this.backButton.height + 20);
+        this.backButton.visible = false;
+        this.backButton.onClick(() => this.sceneManager.goToMainScene());
+
+        this.overlayContainer.addChild(this.backButton);
+    }
+
+    protected async enterMainScene() {
+        await this.sceneManager.goToMainScene();
+    }
+
     protected addListeners() {
         this.layoutManager.events.on(LayoutEvent.Update, (dimensions: Dimensions) => this.sceneManager.updateLayout(dimensions));
         this.sceneManager.events.on(SceneEvent.EnteringMainScene, () => this.backButton.visible = false);
         this.sceneManager.events.on(SceneEvent.EnteringFeatureScene, () => this.backButton.visible = true);
-    }
-
-    protected initFPSCounter() {
-        const fpsCounter = new FPSCounter(this.ticker);
-        this.overlayContainer.addChild(fpsCounter);
     }
 }

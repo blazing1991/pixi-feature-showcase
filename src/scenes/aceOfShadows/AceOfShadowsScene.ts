@@ -22,52 +22,7 @@ export class AceOfShadowsScene extends BaseScene {
         this.createStacks();
         this.createController();
         this.createControls();
-    }
-
-    protected createStacks(): void {
-        this.stackA = new CardStack(144);
-        this.stackB = new CardStack(0);
-        this.flightLayer = new Container();
-        this.addChild(this.stackA, this.stackB, this.flightLayer);
-    }
-
-    protected createController(): void {
-        this.sequenceController = new SequenceController(this.stackA, this.stackB, this.flightLayer);
-    }
-
-    protected createControls(): void {
-        this.playButton = new Button("Play");
-        this.skipButton = new Button("Skip");
-        this.rewindButton = new Button("Rewind");
-        this.skipButton.disabled = true;
-        this.rewindButton.disabled = true;
-
-        this.addChild(this.playButton, this.skipButton, this.rewindButton);
-
-        this.playButton.onClick(() => {
-            this.playButton.disabled = true;
-            this.skipButton.disabled = false;
-            this.sequenceController.play()
-                .then(() => {
-                    this.rewindButton.disabled = false;
-                    this.skipButton.disabled = true;
-                });
-        });
-
-        this.skipButton.onClick(() => {
-            this.skipButton.disabled = true;
-            this.sequenceController.skip();
-        });
-
-        this.rewindButton.onClick(() => {
-            this.rewindButton.disabled = true;
-            this.skipButton.disabled = false;
-            this.sequenceController.rewind()
-                .then(() => {
-                    this.playButton.disabled = false;
-                    this.skipButton.disabled = true;
-                });
-        });
+        this.addEventListeners();
     }
 
     public updateLayout(dimensions: {width: number; height: number}): void {
@@ -98,6 +53,55 @@ export class AceOfShadowsScene extends BaseScene {
 
     public destroyScene(): void {
         this.sequenceController.destroy();
-        this.children.forEach(child => child.destroy({children: true}));
+        this.destroy({children: true});
+    }
+
+    protected createStacks(): void {
+        this.stackA = new CardStack(144);
+        this.stackB = new CardStack(0);
+        this.flightLayer = new Container();
+
+        this.addChild(this.stackA, this.stackB, this.flightLayer);
+    }
+
+    protected createController(): void {
+        this.sequenceController = new SequenceController(this.stackA, this.stackB, this.flightLayer);
+    }
+
+    protected createControls(): void {
+        this.playButton = new Button("Play");
+        this.skipButton = new Button("Skip");
+        this.rewindButton = new Button("Rewind");
+        this.skipButton.disabled = true;
+        this.rewindButton.disabled = true;
+
+        this.addChild(this.playButton, this.skipButton, this.rewindButton);
+    }
+
+    protected addEventListeners(): void {
+        this.playButton.onClick(() => {
+            this.playButton.disabled = true;
+            this.skipButton.disabled = false;
+            this.sequenceController.play()
+                .then(() => {
+                    this.rewindButton.disabled = false;
+                    this.skipButton.disabled = true;
+                });
+        });
+
+        this.skipButton.onClick(() => {
+            this.skipButton.disabled = true;
+            this.sequenceController.skip();
+        });
+
+        this.rewindButton.onClick(() => {
+            this.rewindButton.disabled = true;
+            this.skipButton.disabled = false;
+            this.sequenceController.rewind()
+                .then(() => {
+                    this.playButton.disabled = false;
+                    this.skipButton.disabled = true;
+                });
+        });
     }
 }

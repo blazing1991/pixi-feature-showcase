@@ -4,6 +4,7 @@ import type {Dimensions} from "../../config/types";
 import {Text} from "pixi.js";
 import {SceneManager} from "../../core/SceneManager";
 import {AceOfShadowsScene} from "../aceOfShadows/AceOfShadowsScene";
+import {PhoenixFlameScene} from "../phoenixFlame/PhoenixFlameScene";
 
 export class MainScene extends BaseScene {
     protected menuText: Text;
@@ -29,11 +30,18 @@ export class MainScene extends BaseScene {
         this.menuText.anchor.set(0.5);
         this.buttonAceOfShadows = new Button("Ace of Shadows");
         this.buttonMagicWords = new Button("Magic Words");
+        this.buttonMagicWords.disabled = true; // Placeholder for future feature
         this.buttonPhoenixFlame = new Button("Phoenix Flame");
 
         this.buttonAceOfShadows.onClick(() => {
             this.sceneManager.showFeature(
                 new AceOfShadowsScene()
+            );
+        });
+
+        this.buttonPhoenixFlame.onClick(() => {
+            this.sceneManager.showFeature(
+                new PhoenixFlameScene()
             );
         });
 
@@ -51,6 +59,6 @@ export class MainScene extends BaseScene {
     }
 
     public destroyScene(): void {
-        // Clean up resources and listeners here
+        // Main scene is not destroyed when switching features.
     }
 }
