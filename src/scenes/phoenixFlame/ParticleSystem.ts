@@ -18,6 +18,7 @@ export class ParticleSystem extends ParticleContainer {
 
     public destroy(options?: IDestroyOptions) {
         super.destroy(options);
+        this.stop();
         Ticker.shared.remove(this.update, this);
     }
 

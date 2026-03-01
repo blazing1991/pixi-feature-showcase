@@ -44,6 +44,7 @@ export class Button extends Container {
     }
 
     public onClick(callback: () => void): void {
+        this.removeAllListeners("pointertap");
         this.on("pointertap", callback);
     }
 
