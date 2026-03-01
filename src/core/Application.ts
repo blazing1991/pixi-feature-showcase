@@ -1,17 +1,19 @@
 import {Application as PIXIApplication, Assets, Container} from "pixi.js";
-import {SceneManager} from "./SceneManager";
+import {SceneEvent, SceneManager} from "./SceneManager";
 import {LayoutEvent, LayoutManager} from "./LayoutManager";
 import {HTML_CONTAINER_ID} from "../config/constants";
-import {MainScene} from "../scenes/MainScene";
 import type {Dimensions} from "../config/types";
 import {ASSETS} from "../config/assets";
 import {FPSCounter} from "../ui/FPSCounter";
+import {MainScene} from "../scenes/main/MainScene";
+import {Button} from "../ui/Button";
 
 export class Application extends PIXIApplication {
     protected sceneManager: SceneManager;
     protected layoutManager: LayoutManager;
     protected rootContainer: Container;
     protected overlayContainer: Container;
+    protected backButton: Button;
 
     constructor() {
         super({
@@ -33,10 +35,21 @@ export class Application extends PIXIApplication {
         this.initSceneManager();
         this.addListeners();
         this.initFPSCounter();
+        this.createGlobalUI();
+        await this.enterMainScene();
+    }
 
-        await this.sceneManager.changeScene(new MainScene())
-        this.layoutManager.forceUpdateLayout();
+    private createGlobalUI(): void {
+        this.backButton = new Button("Back");
+        this.backButton.scale.set(0.5);
+        this.backButton.position.set(this.backButton.width / 2, this.backButton.height + 20);
+        this.backButton.visible = false;
+        this.backButton.on("click", () => this.sceneManager.goToMainScene());
+        this.overlayContainer.addChild(this.backButton);
+    }
 
+    protected async enterMainScene() {
+        await this.sceneManager.goToMainScene();
     }
 
     protected attachApplication() {
@@ -69,11 +82,13 @@ export class Application extends PIXIApplication {
     }
 
     protected initSceneManager() {
-        this.sceneManager = new SceneManager(this.rootContainer);
+        this.sceneManager = new SceneManager(this.rootContainer, this.layoutManager);
     }
 
     protected addListeners() {
         this.layoutManager.events.on(LayoutEvent.Update, (dimensions: Dimensions) => this.sceneManager.updateLayout(dimensions));
+        this.sceneManager.events.on(SceneEvent.EnteringMainScene, () => this.backButton.visible = false);
+        this.sceneManager.events.on(SceneEvent.EnteringFeatureScene, () => this.backButton.visible = true);
     }
 
     protected initFPSCounter() {
