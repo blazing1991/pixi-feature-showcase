@@ -3,6 +3,7 @@ import {CardStack} from "./CardStack";
 import {SequenceController} from "./SequenceController";
 import {Container} from "pixi.js";
 import {Button} from "../../ui/Button";
+import {isPortraitRatio} from "../../utils/Utils";
 
 export class AceOfShadowsScene extends BaseScene {
     protected stackA: CardStack;
@@ -43,40 +44,56 @@ export class AceOfShadowsScene extends BaseScene {
 
         this.addChild(this.playButton, this.skipButton, this.rewindButton);
 
-        this.playButton.on("click", () => {
+        this.playButton.onClick(() => {
             this.playButton.disabled = true;
             this.skipButton.disabled = false;
             this.sequenceController.play()
-                .then(() => this.rewindButton.disabled = false);
+                .then(() => {
+                    this.rewindButton.disabled = false;
+                    this.skipButton.disabled = true;
+                });
         });
 
-        this.skipButton.on("click", () => {
+        this.skipButton.onClick(() => {
             this.skipButton.disabled = true;
             this.sequenceController.skip();
         });
 
-        this.rewindButton.on("click", () => {
+        this.rewindButton.onClick(() => {
             this.rewindButton.disabled = true;
             this.skipButton.disabled = false;
             this.sequenceController.rewind()
-                .then(() => this.playButton.disabled = false);
+                .then(() => {
+                    this.playButton.disabled = false;
+                    this.skipButton.disabled = true;
+                });
         });
     }
 
     public updateLayout(dimensions: {width: number; height: number}): void {
+        const isPortrait = isPortraitRatio(dimensions);
         const centerX = dimensions.width / 2;
         const centerY = dimensions.height / 2;
-        const buttonsSpacing = this.playButton.width + 5;
+        const buttonsSpacing = 220;
+        const stacksOffset = {x: 250, y: isPortrait ? 200 : 70};
+        const stacksScale = 0.8;
+        const buttonsScale = 0.8;
 
         this.position.set(centerX, centerY);
 
+        this.playButton.scale.set(buttonsScale);
+        this.skipButton.scale.set(buttonsScale);
+        this.rewindButton.scale.set(buttonsScale);
         this.playButton.position.set(-buttonsSpacing, dimensions.height / 2 - 100);
         this.skipButton.position.set(0, this.playButton.position.y);
         this.rewindButton.position.set(buttonsSpacing, this.playButton.position.y);
 
-        this.stackA.position.set(-250, 0);
-        this.stackB.position.set(250, 0);
-        this.flightLayer.position.set(0, 0);
+        this.stackA.position.set(-stacksOffset.x, stacksOffset.y);
+        this.stackB.position.set(stacksOffset.x, stacksOffset.y);
+        this.flightLayer.position.set(0, stacksOffset.y);
+        this.stackA.scale.set(stacksScale);
+        this.stackB.scale.set(stacksScale);
+        this.flightLayer.scale.set(stacksScale);
     }
 
     public destroyScene(): void {

@@ -31,7 +31,7 @@ export class MainScene extends BaseScene {
         this.buttonMagicWords = new Button("Magic Words");
         this.buttonPhoenixFlame = new Button("Phoenix Flame");
 
-        this.buttonAceOfShadows.on("click", () => {
+        this.buttonAceOfShadows.onClick(() => {
             this.sceneManager.showFeature(
                 new AceOfShadowsScene()
             );

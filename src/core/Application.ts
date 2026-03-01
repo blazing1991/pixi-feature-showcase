@@ -44,7 +44,7 @@ export class Application extends PIXIApplication {
         this.backButton.scale.set(0.5);
         this.backButton.position.set(this.backButton.width / 2, this.backButton.height + 20);
         this.backButton.visible = false;
-        this.backButton.on("click", () => this.sceneManager.goToMainScene());
+        this.backButton.onClick(() => this.sceneManager.goToMainScene());
         this.overlayContainer.addChild(this.backButton);
     }
 

@@ -37,9 +37,14 @@ export class Button extends Container {
         this.addChild(this.animationContainer);
 
         this.interactive = true;
+        this.eventMode = "static";
         this.cursor = "pointer";
 
         this.setupInteractions();
+    }
+
+    public onClick(callback: () => void): void {
+        this.on("pointertap", callback);
     }
 
     public set disabled(value: boolean) {
@@ -48,7 +53,7 @@ export class Button extends Container {
         this.background.tint = value ? 0x6C716C : 0xffffff;
         this.text.tint = this.background.tint;
         this.killAnimationTween();
-        this.scale.set(1);
+        this.animationContainer.scale.set(1);
     }
 
     public get disabled(): boolean {
