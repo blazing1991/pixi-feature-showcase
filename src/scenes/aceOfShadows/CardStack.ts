@@ -27,7 +27,7 @@ export class CardStack extends Container {
 
         this.cardsCountText = new Text(cardsAmount.toString(), {
             fill: 0xffffff,
-            fontSize: 16,
+            fontSize: 25,
             fontWeight: "bold"
         });
         this.cardsCountText.anchor.set(0.5);

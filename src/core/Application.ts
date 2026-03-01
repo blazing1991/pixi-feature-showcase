@@ -17,7 +17,9 @@ export class Application extends PIXIApplication {
     constructor() {
         super({
             backgroundColor: 0x111827,
-            antialias: true
+            antialias: true,
+            resolution: window.devicePixelRatio,
+            autoDensity: true
         });
 
         this.init();
