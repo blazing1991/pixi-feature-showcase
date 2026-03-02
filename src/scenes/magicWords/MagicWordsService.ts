@@ -1,37 +1,10 @@
-export interface DialogueItem {
-    name: string;
-    text: string;
-}
-
-export interface EmojiItem {
-    name: string;
-    url: string;
-}
-
-export interface AvatarItem {
-    name: string;
-    url: string;
-    position: AvatarPosition;
-}
-
-export enum AvatarPosition {
-    LEFT = "left",
-    RIGHT = "right"
-}
-
-export interface MagicWordsResponse {
-    dialogue: DialogueItem[];
-    emojies: EmojiItem[];
-    avatars: AvatarItem[];
-}
-
-const ENDPOINT =
-    "https://private-624120-softgamesassignment.apiary-mock.com/v2/magicwords";
+import type {MagicWordsResponse} from "../../config/types";
+import {MAGIC_WORDS_ENDPOINT} from "../../config/constants";
 
 export class MagicWordsService {
 
     public async fetch(): Promise<MagicWordsResponse> {
-        const response = await fetch(ENDPOINT);
+        const response = await fetch(MAGIC_WORDS_ENDPOINT);
 
         if (!response.ok) {
             throw new Error("Failed to fetch Magic Words data.");

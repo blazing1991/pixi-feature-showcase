@@ -2,7 +2,7 @@ import {Container, NineSlicePlane, Text, TextStyle, Texture} from "pixi.js";
 import {LazyLoadedSprite} from "../../core/LazyLoadedSprite";
 import {RichText} from "./RichText";
 import {ASSETS} from "../../config/assets";
-import {AvatarPosition} from "./MagicWordsService";
+import {AvatarPosition} from "../../config/types";
 
 interface DialogBubbleOptions {
     name: string;

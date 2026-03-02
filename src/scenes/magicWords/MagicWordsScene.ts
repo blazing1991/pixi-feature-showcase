@@ -1,15 +1,14 @@
 import {BaseScene} from "../../core/BaseScene";
-import type {Dimensions} from "../../config/types";
-import type {MagicWordsResponse} from "./MagicWordsService";
-import {AvatarPosition, MagicWordsService} from "./MagicWordsService";
+import type {Dimensions, MagicWordsResponse} from "../../config/types";
+import {MagicWordsService} from "./MagicWordsService";
 import {Container, Sprite, Text} from "pixi.js";
-import {waitMinimumTime} from "../../utils/Utils";
+import {getAvatarData, isPortraitRatio, waitMinimumTime} from "../../utils/Utils";
 import {gsap} from "gsap";
 import {DialogBubble} from "./DialogBubble";
 import {ScrollableContainer} from "../../core/ScrollableContainer";
+import {AvatarPosition} from "../../config/types";
 
 export class MagicWordsScene extends BaseScene {
-    protected contentContainer!: Container;
     protected scrollableContainer!: ScrollableContainer;
     protected loadingContainer?: Container;
     protected errorContainer?: Container;
@@ -21,9 +20,6 @@ export class MagicWordsScene extends BaseScene {
     }
 
     public async init() {
-        this.contentContainer = new Container();
-        this.addChild(this.contentContainer);
-
         this.scrollableContainer = new ScrollableContainer({
             width: 0,
             height: 0
@@ -32,31 +28,19 @@ export class MagicWordsScene extends BaseScene {
 
         this.service = new MagicWordsService();
 
-
         this.showLoading();
         this.startLoading();
     }
 
-    protected async startLoading(): Promise<void> {
-        const minDelay = waitMinimumTime(1);
 
-        try {
-            const rawResponse = await this.service.fetch();
-
-            await minDelay;
-
-            this.showReady(rawResponse);
-        } catch (error) {
-            const errorMessage = error instanceof Error ? error.message : "An unknown error occurred";
-            this.showError(errorMessage);
-        }
-    }
 
     public updateLayout(dimensions: Dimensions, viewPort: Dimensions): void {
+        const isPortrait = isPortraitRatio(dimensions);
         const centerX = dimensions.width / 2;
         const centerY = dimensions.height / 2;
 
         this.position.set(centerX, centerY);
+        this.scale.set(isPortrait ? 0.85 : 1);
         this.scrollableContainer.setViewportSize(viewPort.width, viewPort.height);
     }
 
@@ -67,11 +51,15 @@ export class MagicWordsScene extends BaseScene {
 
     protected showReady(rawResponse: MagicWordsResponse): void {
         this.destroyLoader();
+        this.showDialog(rawResponse);
+    }
+
+    protected showDialog(rawResponse: MagicWordsResponse) {
         const offset = {x: 20, y: 24};
         let lastY = 0;
 
         for (const dialogue of rawResponse.dialogue) {
-            const avatarData = this.getAvatarData(dialogue.name, rawResponse);
+            const avatarData = getAvatarData(dialogue.name, rawResponse);
             const isLeftSide = avatarData.position === AvatarPosition.LEFT;
 
             const dialogBubble = new DialogBubble({
@@ -91,15 +79,6 @@ export class MagicWordsScene extends BaseScene {
         }
     }
 
-    protected getAvatarData(name: string, rawResponse: MagicWordsResponse) {
-        const defaultData = {
-            name,
-            url: "",
-            position: AvatarPosition.LEFT
-        };
-        return rawResponse.avatars.find(avatar => avatar.name === name) || defaultData;
-    }
-
     protected showLoading(): void {
         const loader = Sprite.from("loader.png");
         const text = new Text("Loading...", {fontSize: 24, fill: 0xffffff});
@@ -115,7 +94,20 @@ export class MagicWordsScene extends BaseScene {
         ;
 
         container.addChild(text, loader);
-        this.contentContainer.addChild(container);
+        this.addChild(container);
+    }
+
+    protected async startLoading(): Promise<void> {
+        try {
+            const rawResponse = await this.service.fetch();
+
+            await waitMinimumTime(2000);
+
+            this.showReady(rawResponse);
+        } catch (error) {
+            const errorMessage = error instanceof Error ? error.message : "An unknown error occurred";
+            this.showError(errorMessage);
+        }
     }
 
     protected showError(errorText: string): void {
@@ -128,14 +120,14 @@ export class MagicWordsScene extends BaseScene {
 
         text.anchor.set(0.5);
         this.destroyLoader();
-        this.contentContainer.removeChildren();
 
         container.addChild(text);
-        this.contentContainer.addChild(container);
+        this.addChild(container);
     }
 
     protected destroyLoader(): void {
         this.loadingAnimation?.kill();
+        this.loadingContainer?.parent?.removeChild(this.loadingContainer);
         this.loadingContainer?.destroy({children: true});
         this.loadingContainer = undefined;
         this.loadingAnimation = undefined;

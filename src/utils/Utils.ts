@@ -1,5 +1,6 @@
 import type {Dimensions} from "../config/types";
 import {Container} from "pixi.js";
+import {AvatarPosition, MagicWordsResponse} from "../config/types";
 
 export function isPortraitRatio(rect: Dimensions) {
     return rect.width < rect.height;
@@ -41,4 +42,13 @@ export function calculateCurvedPath(start: {x: number, y: number}, end: {x: numb
  */
 export function waitMinimumTime(ms: number): Promise<void> {
     return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+export function getAvatarData(name: string, rawResponse: MagicWordsResponse) {
+    const defaultData = {
+        name,
+        url: "",
+        position: AvatarPosition.LEFT
+    };
+    return rawResponse.avatars.find(avatar => avatar.name === name) || defaultData;
 }
