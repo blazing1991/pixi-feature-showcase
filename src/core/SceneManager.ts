@@ -15,10 +15,9 @@ export class SceneManager {
     protected currentFeatureScene: BaseScene | null = null;
 
     constructor(protected rootContainer: Container, protected layoutManager: LayoutManager) {
-        this.initMainScene();
     }
 
-    protected async initMainScene() {
+    public async init() {
         this.mainScene = new MainScene(this);
         await this.mainScene.init();
     }

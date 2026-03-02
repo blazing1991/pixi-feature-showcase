@@ -30,7 +30,7 @@ export class Application extends PIXIApplication {
         await this.loadAssets();
         this.initContainers();
         this.initLayoutManager();
-        this.initSceneManager();
+        await this.initSceneManager();
         this.initFPSCounter();
         this.initBackButton();
         this.addListeners();
@@ -67,8 +67,9 @@ export class Application extends PIXIApplication {
         this.layoutManager = new LayoutManager(this.rootContainer, this.renderer);
     }
 
-    protected initSceneManager() {
+    protected async initSceneManager() {
         this.sceneManager = new SceneManager(this.rootContainer, this.layoutManager);
+        await this.sceneManager.init();
     }
 
     protected initFPSCounter() {

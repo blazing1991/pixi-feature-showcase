@@ -60,11 +60,11 @@ export class DialogBubble extends Container {
     protected createBubble(width: number, height: number): NineSlicePlane {
         const wallWidth = 20;
         const bubble = new NineSlicePlane(Texture.from(ASSETS.CHAT_BUBBLE), wallWidth, wallWidth, wallWidth, wallWidth);
-        const offsetY = -width / 15;
+        const offsetX = -width / 15;
 
         bubble.width = width + wallWidth * 5;
         bubble.height = height + wallWidth * 2;
-        bubble.pivot.set(bubble.width / 2 + offsetY, bubble.height / 2);
+        bubble.pivot.set(bubble.width / 2 + offsetX, bubble.height / 2);
 
         return bubble;
     }
