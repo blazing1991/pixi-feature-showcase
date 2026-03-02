@@ -13,9 +13,10 @@ export const FLAME_EMITTER_CONFIG: EmitterConfigV3 = {
             config: {
                 alpha: {
                     list: [
-                        {value: 0, time: 0},
-                        {value: 1, time: 0.5},
-                        {value: 0, time: 1}
+                        { value: 0, time: 0 },
+                        { value: 0.7, time: 0.15 },
+                        { value: 0.5, time: 0.6 },
+                        { value: 0, time: 1 }
                     ]
                 }
             }
@@ -25,9 +26,10 @@ export const FLAME_EMITTER_CONFIG: EmitterConfigV3 = {
             config: {
                 color: {
                     list: [
-                        {value: "fff4a3", time: 0},
-                        {value: "ff8c00", time: 0.5},
-                        {value: "ff3300", time: 1}
+                        { value: "fff4a3", time: 0 },
+                        { value: "ffb347", time: 0.3 },
+                        { value: "ff5a00", time: 0.7 },
+                        { value: "992200", time: 1 }
                     ]
                 }
             }
@@ -37,9 +39,9 @@ export const FLAME_EMITTER_CONFIG: EmitterConfigV3 = {
             config: {
                 scale: {
                     list: [
-                        {value: 0.6, time: 0},
-                        {value: 1, time: 0.5},
-                        {value: 0.3, time: 1}
+                        { value: 0.4, time: 0 },
+                        { value: 1.2, time: 0.5 },
+                        { value: 0.6, time: 1 }
                     ]
                 }
             }
@@ -58,7 +60,7 @@ export const FLAME_EMITTER_CONFIG: EmitterConfigV3 = {
         },
         {
             type: 'spawnShape',
-            config: {type: 'circle', data: {x: 0, y: 0, radius: 40}},
+            config: {type: 'circle', data: {x: 0, y: 0, radius: 30}},
         },
         {type: 'textureSingle', config: {texture: Texture.WHITE}},
     ],

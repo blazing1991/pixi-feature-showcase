@@ -46,6 +46,6 @@ export class LayoutManager {
             (viewport.height - scaledHeight) / 2
         );
 
-        this.events.emit(LayoutEvent.Update, this.logicalDimensions, viewport);
+        this.events.emit(LayoutEvent.Update, this.logicalDimensions, viewport, this.scale);
     }
 }

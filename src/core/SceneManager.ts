@@ -37,9 +37,9 @@ export class SceneManager {
         this.layoutManager.forceUpdateLayout();
     }
 
-    public updateLayout(dimensions: Dimensions, viewPort: Dimensions): void {
+    public updateLayout(dimensions: Dimensions, viewPort: Dimensions, scale: number): void {
         if (this.currentFeatureScene) {
-            this.currentFeatureScene.updateLayout(dimensions, viewPort);
+            this.currentFeatureScene.updateLayout(dimensions, viewPort, scale);
         } else {
             this.mainScene.updateLayout(dimensions);
         }

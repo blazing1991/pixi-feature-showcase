@@ -23,9 +23,6 @@ export class Application extends PIXIApplication {
         });
 
         this.init();
-
-        // @ts-expect-error Chrome PIXI plugin
-        globalThis.__PIXI_APP__ = this;
     }
 
     protected async init() {
@@ -94,7 +91,7 @@ export class Application extends PIXIApplication {
     }
 
     protected addListeners() {
-        this.layoutManager.events.on(LayoutEvent.Update, (dimensions: Dimensions, viewPort: Dimensions) => this.sceneManager.updateLayout(dimensions, viewPort));
+        this.layoutManager.events.on(LayoutEvent.Update, (dimensions: Dimensions, viewPort: Dimensions, scale: number) => this.sceneManager.updateLayout(dimensions, viewPort, scale));
         this.sceneManager.events.on(SceneEvent.EnteringMainScene, () => this.backButton.visible = false);
         this.sceneManager.events.on(SceneEvent.EnteringFeatureScene, () => this.backButton.visible = true);
     }

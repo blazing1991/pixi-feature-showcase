@@ -1,5 +1,6 @@
 import {Container, Rectangle} from "pixi.js";
 import type {FederatedPointerEvent, FederatedWheelEvent, IDestroyOptions} from "pixi.js";
+import {Dimensions} from "../config/types";
 
 interface ScrollableContainerOptions {
     width: number;
@@ -35,7 +36,7 @@ export class ScrollableContainer extends Container {
         this.eventMode = "static";
         this.interactiveChildren = true;
 
-        this.redrawMask();
+        this.adjustHitArea();
         this.updateScrollBounds();
         this.setupInteraction();
     }
@@ -59,12 +60,12 @@ export class ScrollableContainer extends Container {
     }
 
     /**
-     * Updates the viewport size and recomputes the mask and scroll bounds.
+     * Updates the viewport size and recomputes the scroll bounds.
      */
-    public setViewportSize(width: number, height: number): void {
-        this.viewportWidth = width;
-        this.viewportHeight = height;
-        this.redrawMask();
+    public setViewportSize(viewPort: Dimensions): void {
+        this.viewportWidth = viewPort.width;
+        this.viewportHeight = viewPort.height;
+        this.adjustHitArea();
         this.updateScrollBounds();
     }
 
@@ -75,7 +76,7 @@ export class ScrollableContainer extends Container {
         this.updateScrollBounds();
     }
 
-    protected redrawMask(): void {
+    protected adjustHitArea(): void {
         this.hitArea = new Rectangle(-this.viewportWidth / 2, -this.viewportHeight / 2, this.viewportWidth, this.viewportHeight);
     }
 

@@ -1,12 +1,12 @@
 import {BaseScene} from "../../core/BaseScene";
 import type {Dimensions, MagicWordsResponse} from "../../config/types";
+import {AvatarPosition} from "../../config/types";
 import {MagicWordsService} from "./MagicWordsService";
 import {Container, Sprite, Text} from "pixi.js";
-import {getAvatarData, isPortraitRatio, waitMinimumTime} from "../../utils/Utils";
+import {getAvatarData, waitMinimumTime} from "../../utils/Utils";
 import {gsap} from "gsap";
 import {DialogBubble} from "./DialogBubble";
 import {ScrollableContainer} from "../../core/ScrollableContainer";
-import {AvatarPosition} from "../../config/types";
 
 export class MagicWordsScene extends BaseScene {
     protected scrollableContainer!: ScrollableContainer;
@@ -32,16 +32,13 @@ export class MagicWordsScene extends BaseScene {
         this.startLoading();
     }
 
-
-
-    public updateLayout(dimensions: Dimensions, viewPort: Dimensions): void {
-        const isPortrait = isPortraitRatio(dimensions);
+    public updateLayout(dimensions: Dimensions, viewPort: Dimensions, scale: number): void {
+        const unscaledViewPort = {width: viewPort.width / scale, height: viewPort.height / scale};
         const centerX = dimensions.width / 2;
         const centerY = dimensions.height / 2;
 
         this.position.set(centerX, centerY);
-        this.scale.set(isPortrait ? 0.85 : 1);
-        this.scrollableContainer.setViewportSize(viewPort.width, viewPort.height);
+        this.scrollableContainer.setViewportSize(unscaledViewPort);
     }
 
     public destroyScene(): void {
@@ -56,7 +53,7 @@ export class MagicWordsScene extends BaseScene {
 
     protected showDialog(rawResponse: MagicWordsResponse) {
         const offset = {x: 20, y: 24};
-        let lastY = 0;
+        let lastY = 30;
 
         for (const dialogue of rawResponse.dialogue) {
             const avatarData = getAvatarData(dialogue.name, rawResponse);
@@ -71,6 +68,7 @@ export class MagicWordsScene extends BaseScene {
                 textImagesData: rawResponse.emojies
             });
 
+            dialogBubble.scale.set(0.8);
             dialogBubble.position.set(offset.x * (isLeftSide ? -1 : 1), lastY + offset.y);
 
             this.scrollableContainer.addContentChild(dialogBubble);
