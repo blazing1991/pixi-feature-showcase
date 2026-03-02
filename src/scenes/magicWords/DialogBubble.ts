@@ -1,8 +1,8 @@
 import {Container, NineSlicePlane, Text, TextStyle, Texture} from "pixi.js";
 import {LazyLoadedSprite} from "../../core/LazyLoadedSprite";
-import {RichText} from "./RichText";
 import {ASSETS} from "../../config/assets";
 import {AvatarPosition} from "../../config/types";
+import {RichText} from "../../ui/RichText";
 
 interface DialogBubbleOptions {
     name: string;

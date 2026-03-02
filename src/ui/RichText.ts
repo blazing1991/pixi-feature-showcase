@@ -1,6 +1,6 @@
 import type {ITextStyle} from "pixi.js";
 import {Container, Text} from "pixi.js";
-import {LazyLoadedSprite} from "../../core/LazyLoadedSprite";
+import {LazyLoadedSprite} from "../core/LazyLoadedSprite";
 
 interface RichTextOptions {
     text: string;
