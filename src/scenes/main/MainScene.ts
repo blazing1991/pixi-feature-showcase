@@ -5,12 +5,13 @@ import {Text} from "pixi.js";
 import {SceneManager} from "../../core/SceneManager";
 import {AceOfShadowsScene} from "../aceOfShadows/AceOfShadowsScene";
 import {PhoenixFlameScene} from "../phoenixFlame/PhoenixFlameScene";
+import {MagicWordsScene} from "../magicWords/MagicWordsScene";
 
 export class MainScene extends BaseScene {
-    protected menuText: Text;
-    protected buttonAceOfShadows: Button;
-    protected buttonMagicWords: Button;
-    protected buttonPhoenixFlame: Button;
+    protected menuText!: Text;
+    protected buttonAceOfShadows!: Button;
+    protected buttonMagicWords!: Button;
+    protected buttonPhoenixFlame!: Button;
 
     constructor(protected sceneManager: SceneManager) {
         super();
@@ -30,12 +31,17 @@ export class MainScene extends BaseScene {
         this.menuText.anchor.set(0.5);
         this.buttonAceOfShadows = new Button("Ace of Shadows");
         this.buttonMagicWords = new Button("Magic Words");
-        this.buttonMagicWords.disabled = true; // Placeholder for future feature
         this.buttonPhoenixFlame = new Button("Phoenix Flame");
 
         this.buttonAceOfShadows.onClick(() => {
             this.sceneManager.showFeature(
                 new AceOfShadowsScene()
+            );
+        });
+
+        this.buttonMagicWords.onClick(() => {
+            this.sceneManager.showFeature(
+                new MagicWordsScene()
             );
         });
 

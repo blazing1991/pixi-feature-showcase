@@ -4,15 +4,16 @@ import {SequenceController} from "./SequenceController";
 import {Container} from "pixi.js";
 import {Button} from "../../ui/Button";
 import {isPortraitRatio} from "../../utils/Utils";
+import type {Dimensions} from "../../config/types";
 
 export class AceOfShadowsScene extends BaseScene {
-    protected stackA: CardStack;
-    protected stackB: CardStack;
-    protected flightLayer: Container;
-    protected sequenceController: SequenceController;
-    protected playButton: Button;
-    protected skipButton: Button;
-    protected rewindButton: Button;
+    protected stackA!: CardStack;
+    protected stackB!: CardStack;
+    protected flightLayer!: Container;
+    protected sequenceController!: SequenceController;
+    protected playButton!: Button;
+    protected skipButton!: Button;
+    protected rewindButton!: Button;
 
     constructor() {
         super();
@@ -25,7 +26,7 @@ export class AceOfShadowsScene extends BaseScene {
         this.addEventListeners();
     }
 
-    public updateLayout(dimensions: {width: number; height: number}): void {
+    public updateLayout(dimensions: Dimensions): void {
         const isPortrait = isPortraitRatio(dimensions);
         const centerX = dimensions.width / 2;
         const centerY = dimensions.height / 2;

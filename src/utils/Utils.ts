@@ -35,3 +35,10 @@ export function calculateCurvedPath(start: {x: number, y: number}, end: {x: numb
         {x: end.x, y: end.y}
     ]
 }
+
+/**
+ * Returns a promise that resolves after a minimum amount of time. This can be used to ensure that certain animations or effects are visible for a minimum duration, even if the underlying logic completes faster.
+ */
+export function waitMinimumTime(ms: number): Promise<void> {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}

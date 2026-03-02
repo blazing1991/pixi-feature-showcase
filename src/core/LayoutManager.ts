@@ -34,10 +34,10 @@ export class LayoutManager {
         // Resize renderer to full window
         this.applicationRenderer.resize(viewport.width, viewport.height);
 
-        // Scale stage
+        // Scale root container
         this.rootContainer.scale.set(this.scale);
 
-        // Center stage
+        // Center root container
         const scaledWidth = logicalDimensions.width * this.scale;
         const scaledHeight = logicalDimensions.height * this.scale;
 
@@ -46,6 +46,6 @@ export class LayoutManager {
             (viewport.height - scaledHeight) / 2
         );
 
-        this.events.emit(LayoutEvent.Update, this.logicalDimensions);
+        this.events.emit(LayoutEvent.Update, this.logicalDimensions, viewport);
     }
 }

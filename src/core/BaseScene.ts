@@ -4,7 +4,7 @@ import type {Dimensions} from "../config/types";
 export abstract class BaseScene extends Container {
     abstract init(): Promise<void>;
 
-    abstract updateLayout(dimensions: Dimensions): void;
+    abstract updateLayout(dimensions: Dimensions, viewPort?: Dimensions): void;
 
     abstract destroyScene(): void;
 }

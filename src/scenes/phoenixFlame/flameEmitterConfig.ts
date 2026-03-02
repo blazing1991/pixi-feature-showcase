@@ -2,10 +2,10 @@ import type {EmitterConfigV3} from "@pixi/particle-emitter";
 import {Texture} from "pixi.js";
 
 export const FLAME_EMITTER_CONFIG: EmitterConfigV3 = {
-    lifetime: {min: 1, max: 1},
+    lifetime: {min: 0.5, max: 1},
     frequency: 0.1,
     emitterLifetime: -1,
-    maxParticles: 100,
+    maxParticles: 10,
     pos: {x: 0, y: 0},
     behaviors: [
         {
@@ -13,8 +13,8 @@ export const FLAME_EMITTER_CONFIG: EmitterConfigV3 = {
             config: {
                 alpha: {
                     list: [
-                        {value: 0.8, time: 0},
-                        {value: 0.4, time: 0.5},
+                        {value: 0, time: 0},
+                        {value: 1, time: 0.5},
                         {value: 0, time: 1}
                     ]
                 }

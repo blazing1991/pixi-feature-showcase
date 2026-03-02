@@ -8,11 +8,11 @@ import {FPSCounter} from "../ui/FPSCounter";
 import {Button} from "../ui/Button";
 
 export class Application extends PIXIApplication {
-    protected sceneManager: SceneManager;
-    protected layoutManager: LayoutManager;
-    protected rootContainer: Container;
-    protected overlayContainer: Container;
-    protected backButton: Button;
+    protected sceneManager!: SceneManager;
+    protected layoutManager!: LayoutManager;
+    protected rootContainer!: Container;
+    protected overlayContainer!: Container;
+    protected backButton!: Button;
 
     constructor() {
         super({
@@ -94,7 +94,7 @@ export class Application extends PIXIApplication {
     }
 
     protected addListeners() {
-        this.layoutManager.events.on(LayoutEvent.Update, (dimensions: Dimensions) => this.sceneManager.updateLayout(dimensions));
+        this.layoutManager.events.on(LayoutEvent.Update, (dimensions: Dimensions, viewPort: Dimensions) => this.sceneManager.updateLayout(dimensions, viewPort));
         this.sceneManager.events.on(SceneEvent.EnteringMainScene, () => this.backButton.visible = false);
         this.sceneManager.events.on(SceneEvent.EnteringFeatureScene, () => this.backButton.visible = true);
     }
